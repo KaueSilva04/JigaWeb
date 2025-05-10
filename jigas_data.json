@@ -1,0 +1,110 @@
+[
+  {
+    "id": "jiga102.local",
+    "ip": "192.168.1.252:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga106.local",
+    "ip": "192.168.1.230:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga112.local",
+    "ip": "192.168.1.227:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga128.local",
+    "ip": "192.168.1.255:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga144.local",
+    "ip": "192.168.1.224:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga146.local",
+    "ip": "192.168.1.225:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga101.local",
+    "ip": "192.168.1.239:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:14:46"
+  },
+  {
+    "id": "jiga103.local",
+    "ip": "192.168.1.238:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga111.local",
+    "ip": "192.168.1.250:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga121.local",
+    "ip": "192.168.1.248:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga127.local",
+    "ip": "192.168.1.228:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:14:46"
+  },
+  {
+    "id": "jiga133.local",
+    "ip": "192.168.0.183:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:14:46"
+  },
+  {
+    "id": "jiga149.local",
+    "ip": "192.168.1.215:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga151.local",
+    "ip": "192.168.1.222:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga157.local",
+    "ip": "192.168.1.223:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:14:46"
+  },
+  {
+    "id": "jiga175.local",
+    "ip": "192.168.1.103:",
+    "status": "active",
+    "lastCheck": "2025-05-09 14:13:26"
+  },
+  {
+    "id": "jiga134.local",
+    "ip": "192.168.1.105:",
+    "status": "active",
+    "lastCheck": "2025-05-09 16:55:18"
+  },
+  {
+    "id": "jiga177.local",
+    "ip": "192.168.1.96:",
+    "status": "active",
+    "lastCheck": "2025-05-09 16:55:18"
+  }
+]

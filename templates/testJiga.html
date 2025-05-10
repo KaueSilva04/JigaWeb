@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Teste de JIGAs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --warning: #f59e0b;
+            --info: #0ea5e9;
+            --info-light: #e0f2fe;
+            --neutral: #6b7280;
+            --light: #f9fafb;
+            --dark: #1f2937;
+            --border: #e5e7eb;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        main {
+            padding: 1.5rem;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            border-color: #d1d5db;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #f9fafb;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: var(--neutral);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: white;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        select:disabled,
+        input:disabled {
+            background-color: #f3f4f6;
+            cursor: not-allowed;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            min-width: 120px;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background-color: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--neutral);
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            background-color: #f9fafb;
+            color: var(--dark);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .results {
+            margin-top: 2rem;
+        }
+
+        .log-container {
+            background-color: #f9fafb;
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            max-height: 350px;
+            overflow-y: auto;
+            font-family: 'Cascadia Code', 'Source Code Pro', Consolas, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .log-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .log-success {
+            background-color: var(--success-light);
+            color: #065f46;
+            border-left: 3px solid var(--success);
+        }
+
+        .log-error {
+            background-color: var(--danger-light);
+            color: #991b1b;
+            border-left: 3px solid var(--danger);
+        }
+
+        .log-info {
+            background-color: var(--info-light);
+            color: #0369a1;
+            border-left: 3px solid var(--info);
+        }
+
+        .log-timestamp {
+            color: var(--neutral);
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        .equipments-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Estilo do card individual */
+        .equipment-card {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        /* Efeito ao passar o mouse */
+        .equipment-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Título do equipamento */
+        .equipment-card h3 {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        /* Informações adicionais */
+        .equipment-card p {
+            font-size: 0.95em;
+            margin: 4px 0;
+            color: #555;
+        }
+
+        .equipment-card button {
+            display: block;
+            margin: 10px auto 0;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .equipment-card button:hover {
+            background-color: #2980b9;
+        }
+
+
+        /* Destaque */
+        .equipment-card strong {
+            color: #222;
+        }
+
+        .equipment-status-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .equipment-status {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            position: relative;
+        }
+
+        .equipment-status::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+            opacity: 0;
+        }
+
+        .status-unknown {
+            background-color: var(--neutral);
+        }
+
+        .status-ok {
+            background-color: var(--success);
+        }
+
+        .status-ok::after {
+            border: 2px solid var(--success);
+            animation: none;
+        }
+
+        .status-fail {
+            background-color: var(--danger);
+        }
+
+        .status-fail::after {
+            border: 2px solid var(--danger);
+            animation: none;
+        }
+
+        .status-testing {
+            background-color: var(--warning);
+        }
+
+        .status-testing::after {
+            border: 2px solid var(--warning);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+
+            70% {
+                opacity: 0;
+                transform: scale(1.5);
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .equipment-message {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .equipment-type-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1rem;
+            color: #9ca3af;
+            opacity: 0.5;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background-color: #e5e7eb;
+            border-radius: 2px;
+            margin-top: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-value {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 2px;
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--neutral);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #d1d5db;
+        }
+
+        .empty-state-message {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-description {
+            color: #9ca3af;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+
+            header {
+                padding: 1.5rem 1rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .tabs {
+                padding: 0 0.5rem;
+            }
+
+            .tab {
+                padding: 0.75rem;
+            }
+
+            .equipments-container {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+        /* Tooltip styles */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #374151;
+            color: white;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        [data-tooltip]:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Custom animation for status changes */
+        @keyframes statusChange {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.5);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .status-change {
+            animation: statusChange 0.5s ease;
+        }
+
+        /* Floating action button */
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .floating-action:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+        }
+
+        .floating-action i {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-icon">
+                <i class="fas fa-microchip"></i>
+            </div>
+            <h1>Sistema de Teste de JIGAs</h1>
+            <p>Plataforma de diagnóstico e validação de equipamentos</p>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="test-all">
+                <i class="fas fa-layer-group"></i> Teste em Lote
+            </div>
+            <div class="tab" data-tab="test-individual">
+                <i class="fas fa-microscope"></i> Teste Individual
+            </div>
+            <div class="tab" data-tab="advanced">
+                <i class="fas fa-sliders-h"></i> Configurações
+            </div>
+        </div>
+
+        <main>
+            <div class="tab-content active" id="test-all">
+                <div class="card">
+                    <div class="form-group">
+                        <label for="jiga-select">
+                            <i class="fas fa-server"></i> Selecione a JIGA:
+                        </label>
+                        <input id="jiga-select">
+                        </input>
+                    </div>
+
+                    <div class="btn-group">
+                        <button id="btn-test-all" class="btn-success">
+                            <i class="fas fa-play-circle"></i> Procurar Jiga
+                        </button>
+                        <button id="btn-test-all" class="btn-success">
+                            <i class="fas fa-play-circle"></i> Iniciar Testes
+                        </button>
+                        <button id="btn-stop-all" class="btn-danger">
+                            <i class="fas fa-stop-circle"></i> Interromper
+                        </button>
+                    </div>
+                </div>
+
+                <div class="results">
+                    <h2 class="section-title">
+                        <i class="fas fa-clipboard-check"></i> Resultados do Teste
+                    </h2>
+
+                    <div class="progress-bar" id="test-progress">
+                        <div class="progress-value" id="progress-value"></div>
+                    </div>
+
+                    <div id="all-equipment-results" class="equipments-container">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div class="empty-state-message">Nenhum equipamento selecionado</div>
+                            <div class="empty-state-description">Selecione uma JIGA para visualizar os equipamentos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="test-individual">
+                <div class="card">
+                    <div class="form-group">
+                        <label for="jiga-select-individual">
+                            <i class="fas fa-server"></i> Selecione a JIGA:
+                        </label>
+                        <input id="jiga-select" value="jiga"></input>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipment-select">
+                            <i class="fas fa-tools"></i> Selecione o Equipamento:
+                        </label>
+                        <select id="equipment-select" disabled>
+                            <option value="">Selecione a JIGA primeiro...</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group">
+                        <button id="btn-test-individual" class="btn-success" disabled>
+                            <i class="fas fa-play-circle"></i> Testar
+                        </button>
+                        <button id="btn-stop-individual" class="btn-danger" disabled>
+                            <i class="fas fa-stop-circle"></i> Interromper
+                        </button>
+                    </div>
+                </div>
+
+                <div class="results">
+                    <h2 class="section-title">
+                        <i class="fas fa-clipboard-list"></i> Resultado do Teste Individual
+                    </h2>
+                    <div class="log-container" id="individual-test-log">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-terminal"></i>
+                            </div>
+                            <div class="empty-state-message">Log de testes vazio</div>
+                            <div class="empty-state-description">Selecione um equipamento e inicie um teste</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="advanced">
+                <div class="card">
+                    <div class="form-group">
+                        <label for="base-url">
+                            <i class="fas fa-link"></i> URL Base da JIGA:
+                        </label>
+                        <input type="text" id="base-url" value="http://{jiga}.local/"
+                            placeholder="Ex: http://{jiga}.local/">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="timeout">
+                            <i class="fas fa-clock"></i> Timeout das Requisições (ms):
+                            <span data-tooltip="Tempo máximo de espera para cada requisição">ⓘ</span>
+                        </label>
+                        <input type="number" id="timeout" value="5000" min="1000" step="1000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="retry-count">
+                            <i class="fas fa-redo"></i> Número de Tentativas:
+                            <span
+                                data-tooltip="Quantidade de vezes que o sistema tentará se comunicar com o equipamento antes de falhar">ⓘ</span>
+                        </label>
+                        <input type="number" id="retry-count" value="3" min="1" max="10">
+                    </div>
+
+                    <div class="btn-group">
+                        <button id="btn-save-advanced" class="btn-success">
+                            <i class="fas fa-save"></i> Salvar
+                        </button>
+                        <button id="btn-reset-advanced" class="btn-danger">
+                            <i class="fas fa-undo"></i> Resetar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="results">
+                    <h2 class="section-title">
+                        <i class="fas fa-history"></i> Log de Atividades do Sistema
+                    </h2>
+                    <div class="log-container" id="system-log">
+                        <!-- Log do sistema será exibido aqui -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="floating-action" id="quick-help" data-tooltip="Ajuda Rápida">
+        <i class="fas fa-question"></i>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Dados mockados dos equipamentos por JIGA
+            async function fetchEquipmentsForJiga(jiga) {
+                try {
+                    console.log(`Fetching data for JIGA: ${jiga}`);
+                    const response = await fetch('http://127.0.0.1:3000/api/equipaments/' + jiga);
+
+                    if (!response.ok) {
+                        throw new Error(`Erro ao buscar dados. Status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    console.log('Dados recebidos:', data);
+                    conectarWebSocket(jiga);
+                    return data;
+                } catch (error) {
+                    console.error('Erro ao buscar dados:', error);
+                    addLog(systemLog, `Erro ao buscar dados da JIGA ${jiga}: ${error.message}`, 'error');
+                    return [];  // Retorna um array vazio para evitar quebras na aplicação
+                }
+
+            }
+
+            // Ícones para tipos de equipamentos
+            const equipmentIcons = {
+                'relay': 'fa-toggle-on',
+                'sensor': 'fa-thermometer-half',
+                'motor': 'fa-cog',
+                'valve': 'fa-tint',
+                'switch': 'fa-exchange-alt'
+            };
+
+            // Configurações globais
+            let config = {
+                baseUrl: 'http://{jiga}.local/',
+                timeout: 5000,
+                retryCount: 3
+            };
+
+            // Estado dos testes
+            let testingInProgress = false;
+            let abortController = null;
+            let currentTestIndex = 0;
+            let totalTests = 0;
+            const jigaEquipments = {};
+            // Elementos DOM
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const jigaSelect = document.getElementById('jiga-select');
+            const jigaSelectIndividual = document.getElementById('jiga-select-individual');
+            const equipmentSelect = document.getElementById('equipment-select');
+            const allEquipmentResults = document.getElementById('all-equipment-results');
+            const individualTestLog = document.getElementById('individual-test-log');
+            const systemLog = document.getElementById('system-log');
+            const baseUrlInput = document.getElementById('base-url');
+            const timeoutInput = document.getElementById('timeout');
+            const retryCountInput = document.getElementById('retry-count');
+            const progressBar = document.getElementById('progress-value');
+            const quickHelp = document.getElementById('quick-help');
+
+            // Botões
+            const btnTestAll = document.getElementById('btn-test-all');
+            const btnStopAll = document.getElementById('btn-stop-all');
+            const btnTestIndividual = document.getElementById('btn-test-individual');
+            const btnStopIndividual = document.getElementById('btn-stop-individual');
+            const btnSaveAdvanced = document.getElementById('btn-save-advanced');
+            const btnResetAdvanced = document.getElementById('btn-reset-advanced');
+
+            // Funções de utilidade
+            function addLog(container, message, type = 'info') {
+                // Verificar se existe um estado vazio a ser removido
+                const emptyState = container.querySelector('.empty-state');
+                if (emptyState) {
+                    container.removeChild(emptyState);
+                }
+
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry log-${type}`;
+
+                const timestamp = document.createElement('span');
+                timestamp.className = 'log-timestamp';
+                timestamp.textContent = `[${new Date().toLocaleTimeString()}]`;
+
+                const messageText = document.createElement('span');
+                messageText.textContent = message;
+
+                logEntry.appendChild(timestamp);
+                logEntry.appendChild(messageText);
+                container.appendChild(logEntry);
+                container.scrollTop = container.scrollHeight;
+            }
+
+            function getEquipmentTypeIcon(type) {
+                return equipmentIcons[type] || 'fa-microchip';
+            }
+
+            function updateEquipmentCard(jiga, equipmentId, status, message = '') {
+                const cardId = `${jiga}-${equipmentId}`;
+                let card = document.getElementById(cardId);
+
+                // Se o cartão não existir, crie-o
+                if (!card) {
+                    return;
+                }
+
+                const statusIndicator = card.querySelector('.equipment-status');
+                statusIndicator.className = 'equipment-status';
+                statusIndicator.classList.add(`status-${status}`);
+                statusIndicator.classList.add('status-change');
+
+                // Reset da animação
+                setTimeout(() => {
+                    statusIndicator.classList.remove('status-change');
+                }, 500);
+
+                const statusText = card.querySelector('.status-text');
+                statusText.textContent = status === 'ok' ? 'Operacional' :
+                    status === 'fail' ? 'Falha' :
+                        status === 'testing' ? 'Testando' : 'Desconhecido';
+
+                const messageEl = card.querySelector('.equipment-message');
+                if (message) {
+                    messageEl.textContent = message;
+                    messageEl.style.display = 'block';
+                } else {
+                    messageEl.style.display = 'none';
+                }
+            }
+
+            function createEquipmentCard(jiga, equipment) {
+                const card = document.createElement('div');
+                card.classList.add('equipment-card'); // Classe de estilo
+
+                // Título do grupo
+                const titulo = document.createElement('h3');
+                titulo.textContent = equipment.grupo;
+                card.appendChild(titulo);
+
+                // Tipo
+                const tipo = document.createElement('p');
+                const strongTipo = document.createElement('strong');
+                strongTipo.textContent = 'Tipo: ';
+                tipo.appendChild(strongTipo);
+                tipo.appendChild(document.createTextNode(equipment.equipamentos[0].idTipo));
+                card.appendChild(tipo);
+
+                // JIGA
+                const jigainfo = document.createElement('p');
+                const strongJiga = document.createElement('strong');
+                strongJiga.textContent = 'JIGA: ';
+                jigainfo.appendChild(strongJiga);
+                jigainfo.appendChild(document.createTextNode(jiga));
+                card.appendChild(jigainfo);
+
+                // Botão de teste
+                const button = document.createElement('button');
+                button.textContent = "Testar";
+                button.addEventListener('click', () => {
+                    openModal(equipment); // Abre o modal passando o equipment
+                });
+                card.appendChild(button);
+
+                return card;
+            }
+
+            function openModal(equipment) {
+                // Verifica se já existe um modal e remove
+                const existingModal = document.querySelector('.modal');
+                if (existingModal) existingModal.remove();
+
+                // Cria o modal e sua estrutura
+                const modal = document.createElement('div');
+                modal.classList.add('modal');
+
+                const modalContent = document.createElement('div');
+                modalContent.classList.add('modal-content');
+
+                const modalHeader = document.createElement('div');
+                modalHeader.classList.add('modal-header');
+
+                const titulo = document.createElement('h2');
+                titulo.textContent = `Detalhes do Equipamento - ${equipment.grupo}`;
+                modalHeader.appendChild(titulo);
+
+                const equipmentInfo = document.createElement('div');
+                equipmentInfo.classList.add('equipment-info');
+
+                // Header da tabela
+                const infoHeader = document.createElement('div');
+                infoHeader.classList.add('info-header');
+
+                ['ID', 'Tipo', 'Nome', 'Status', 'Ação'].forEach(text => {
+                    const span = document.createElement('span');
+                    span.textContent = text;
+                    infoHeader.appendChild(span);
+                });
+
+                equipmentInfo.appendChild(infoHeader);
+
+                // Equipamentos individuais
+                equipment.equipamentos.forEach(io => {
+                    const item = document.createElement('div');
+                    item.classList.add('equipment-item');
+
+                    const spanId = document.createElement('span');
+                    spanId.textContent = io.idBO;
+
+                    const spanTipo = document.createElement('span');
+                    spanTipo.textContent = io.idTipo;
+
+                    const spanNome = document.createElement('span');
+                    spanNome.textContent = io.name;
+
+                    const statusContainer = document.createElement('span');
+                    statusContainer.classList.add('status-container');
+
+                    let status;
+                    if (io.idTipo === "djmono" || io.idTipo === "secc") {
+                        status = io.estado === 0 ? 'fechado' : 'aberto';
+                    } else {
+                        status = io.estado === 1 ? 'fechado' : 'aberto';
+                    }
+
+                    const statusClass = status === 'aberto' ? 'status-led-green' : 'status-led-red';
+
+                    const statusLed = document.createElement('div');
+                    statusLed.classList.add('status-led', statusClass);
+                    statusLed.title = status;
+
+                    const statusText = document.createElement('span');
+                    statusText.classList.add('status-text');
+                    statusText.textContent = status;
+
+                    statusContainer.appendChild(statusLed);
+                    statusContainer.appendChild(statusText);
+
+                    const actionContainer = document.createElement('span');
+                    actionContainer.style.display = "flex";
+                    actionContainer.style.flexDirection = "row";
+
+                    const desButton = document.createElement('button');
+                    desButton.classList.add('test-button', 'des');
+                    desButton.textContent = "Desativar";
+                    desButton.dataset.id = io.id;
+
+                    const actButton = document.createElement('button');
+                    actButton.classList.add('test-button', 'act');
+                    actButton.textContent = "Ativar";
+                    actButton.dataset.id = io.id;
+
+                    actionContainer.appendChild(desButton);
+                    actionContainer.appendChild(actButton);
+
+                    item.appendChild(spanId);
+                    item.appendChild(spanTipo);
+                    item.appendChild(spanNome);
+                    item.appendChild(statusContainer);
+                    item.appendChild(actionContainer);
+
+                    equipmentInfo.appendChild(item);
+                });
+
+                modalHeader.appendChild(equipmentInfo);
+                modalContent.appendChild(modalHeader);
+
+                // Rodapé do modal
+                const modalFooter = document.createElement('div');
+                modalFooter.classList.add('modal-footer');
+
+                const testarTodosButton = document.createElement('button');
+                testarTodosButton.classList.add('button-modal');
+                testarTodosButton.textContent = "Testar Todos";
+
+                const fecharButton = document.createElement('button');
+                fecharButton.classList.add('button-modal', 'close-modal');
+                fecharButton.textContent = "Fechar";
+
+                modalFooter.appendChild(testarTodosButton);
+                modalFooter.appendChild(fecharButton);
+
+                modalContent.appendChild(modalFooter);
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+
+                // Eventos
+                fecharButton.addEventListener('click', () => modal.remove());
+
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        modal.remove();
+                    }
+                });
+
+                document.addEventListener('keydown', function escListener(event) {
+                    if (event.key === 'Escape' && document.body.contains(modal)) {
+                        modal.remove();
+                        document.removeEventListener('keydown', escListener);
+                    }
+                });
+
+                // Eventos dos botões individuais
+                modal.querySelectorAll('.test-button').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const equipmentId = event.target.dataset.id;
+                        testEquipment(equipmentId);
+                    });
+                });
+            }
+
+            // Função para testar um equipamento
+            function testEquipment(equipmentId) {
+                // Aqui você implementaria a lógica real para testar o equipamento
+                console.log(`Testando equipamento ID: ${equipmentId}`);
+
+
+                // Simulação de teste com feedback visual
+                const button = document.querySelector(`.test-button[data-id="${equipmentId}"]`);
+                const statusLed = button.closest('.equipment-item').querySelector('.status-led');
+                const statusText = button.closest('.equipment-item').querySelector('.status-text');
+
+                // Feedback visual do botão durante o teste
+                button.disabled = true;
+                button.textContent = 'Testando...';
+                button.classList.add('testing');
+
+                // Simulação de um teste com resultado após 1.5 segundos
+                setTimeout(() => {
+                    // Alternar o status como demonstração
+                    const isCurrentlyOnline = statusLed.classList.contains('status-led-green');
+
+                    if (isCurrentlyOnline) {
+                        statusLed.classList.remove('status-led-green');
+                        statusLed.classList.add('status-led-red');
+                        statusText.textContent = 'Offline';
+                        showToast(`Equipamento ${equipmentId} está offline`, 'error');
+                    } else {
+                        statusLed.classList.remove('status-led-red');
+                        statusLed.classList.add('status-led-green');
+                        statusText.textContent = 'Online';
+                        showToast(`Equipamento ${equipmentId} está online`, 'success');
+                    }
+
+                    // Resetar o botão
+                    button.disabled = false;
+                    button.textContent = 'Testar';
+                    button.classList.remove('testing');
+                }, 1500);
+            }
+
+            // Função para mostrar mensagens temporárias (toast)
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.classList.add('toast', `toast-${type}`);
+                toast.textContent = message;
+
+                document.body.appendChild(toast);
+
+                // Animar entrada
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+
+                // Remover após 3 segundos
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 300);
+                }, 3000);
+            }
+
+            // CSS (para o modal, botões, status LEDs e toasts):
+            const style = document.createElement('style');
+            style.innerHTML = `
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: fadeIn 0.3s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s forwards;
+            transform: translateY(-20px);
+            overflow: hidden;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+            text-align: center;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            text-align: right;
+            background-color: #f8f8f8;
+        }
+        
+        .equipment-info {
+            max-height: 60vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        
+        .equipment-info::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .equipment-info::-webkit-scrollbar-thumb {
+            background-color: #d0d0d0;
+            border-radius: 3px;
+        }
+        
+        .info-header {
+            display: grid;
+            grid-template-columns: 0.7fr 0.7fr 2fr 1fr 0.7fr;
+            gap: 10px;
+            padding: 10px 5px;
+            font-weight: bold;
+            border-bottom: 2px solid #ddd;
+            color: #555;
+            background-color: #f5f5f5;
+        }
+        
+        .equipment-item {
+            display: grid;
+            grid-template-columns: 0.7fr 0.7fr 2fr 1fr 0.7fr;
+            gap: 10px;
+            padding: 12px 5px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        
+        .equipment-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .button-modal  {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        
+        
+        .close-modal:hover {
+            background-color: #c0392b;
+        }
+        
+        .test-button {
+            background-color: #3498db;
+            color: white;
+            padding: 6px 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        .test-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .test-button.testing {
+            background-color: #95a5a6;
+            cursor: wait;
+        }
+        
+        .des {
+        background-color: red;
+        margin-rigth:1px;
+        }
+        
+        .act{
+            background-color:green;
+            margin-left:1px;
+        }
+        
+        .status-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-led {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .status-led-green {
+            background-color: #2ecc71;
+            box-shadow: 0 0 5px #2ecc71;
+        }
+        
+        .status-led-red {
+            background-color: #e74c3c;
+            box-shadow: 0 0 5px #e74c3c;
+        }
+        
+        .status-text {
+            font-size: 14px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 1100;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .toast-info {
+            background-color: #3498db;
+        }
+        
+        .toast-success {
+            background-color: #2ecc71;
+        }
+        
+        .toast-error {
+            background-color: #e74c3c;
+        }
+    `;
+            document.head.appendChild(style);
+
+
+            async function populateEquipmentCards(jiga) {
+                allEquipmentResults.innerHTML = '';
+
+                const equipments = await fetchEquipmentsForJiga(jiga);
+
+                if (!equipments || equipments.length === 0) {
+                    allEquipmentResults.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="empty-state-message">Nenhum equipamento encontrado</div>
+                <div class="empty-state-description">Esta JIGA não possui equipamentos cadastrados</div>
+            </div>
+        `;
+                    return;
+                }
+
+                equipments.forEach(equipment => {
+                    const card = createEquipmentCard(jiga, equipment);
+                    allEquipmentResults.appendChild(card);
+                });
+
+                // Salvar equipamentos no cache local se necessário
+                jigaEquipments[jiga] = equipments;
+            }
+
+            function conectarWebSocket(jiga) {
+                const socket = new WebSocket(`ws://${jiga}.local/ws`);  // Conectando ao WebSocket
+
+                socket.onopen = function () {
+                    console.log("🔌 Conectado ao WebSocket.");
+                };
+
+                socket.onmessage = function (event) {
+                    console.log("📨 Mensagem recebida:", event.data);
+
+                    try {
+                        const data = JSON.parse(event.data);
+
+                        // Se a mensagem contiver dados de 'bo', vamos atualizar os modais
+                        if (data.ind.bo && Array.isArray(data.ind.bo)) {
+                            console.log("✅ Dados de 'bo' recebidos, atualizando modais...");
+                            console.log(data.ind.bo);
+                            const todosItens = document.querySelectorAll('.equipment-item');
+                            console.log(todosItens);
+                            data.ind.bo.forEach(io => {
+                                todosItens.forEach(item => {
+                                    const spans = item.querySelectorAll('span');
+                                    const spanIdBO = spans[0]?.textContent.trim();
+                                    const spanTipo = spans[1]?.textContent.trim();
+
+                                    if (spanIdBO == io.idBO) {
+                                        const statusTextElement = item.querySelector('.status-text');
+                                        const statusLedElement = item.querySelector('.status-led');
+
+                                        let statusText;
+                                        if (spanTipo === "djmono" || spanTipo === "secc") {
+                                            statusText = io.val == 0 ? 'fechado' : 'aberto';
+                                        } else {
+                                            statusText = io.val == 1 ? 'fechado' : 'aberto';
+                                        }
+
+                                        const statusClass = io.val === 1 ? 'status-led-green' : 'status-led-red';
+
+                                        if (statusTextElement) {
+                                            statusTextElement.textContent = statusText;
+                                        }
+
+                                        if (statusLedElement) {
+                                            statusLedElement.classList.remove('status-led-green', 'status-led-red');
+                                            statusLedElement.classList.add(statusClass);
+                                        }
+                                    }
+                                });
+                            });
+
+
+                            // Função que vai atualizar os modais com os dados recebidos
+
+                        } else {
+                            console.warn("⚠️ Dados recebidos não são válidos ou não contêm 'bo'");
+                        }
+                    } catch (error) {
+                        console.error("❌ Erro ao processar mensagem WebSocket:", error);
+                    }
+                };
+
+                socket.onerror = function (error) {
+                    console.error("❗ Erro no WebSocket:", error);
+                };
+
+                socket.onclose = function () {
+                    console.warn("🔌 Conexão WebSocket encerrada.");
+                };
+            }
+
+            // Função para atualizar os modais com os dados mais recentes
+
+            // Atualiza os modais com os dados recebidos
+            // Função para atualizar os modais com os dados mais recentes
+            function atualizarTodosOsEquipamentos(boList) {
+
+            }
+
+
+
+
+
+            async function populateEquipmentOptions(jiga) {
+                equipmentSelect.innerHTML = '';
+                equipmentSelect.disabled = !jiga;
+
+                if (!jiga) {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'Selecione a JIGA primeiro...';
+                    equipmentSelect.appendChild(option);
+                    return;
+                }
+
+                const equipments = await fetchEquipmentsForJiga(jiga);
+                jigaEquipments[jiga] = equipments;
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Selecione um equipamento...';
+                equipmentSelect.appendChild(defaultOption);
+
+                equipments.forEach(equipment => {
+                    const option = document.createElement('option');
+                    option.value = equipment.id;
+                    option.textContent = equipment.name;
+                    equipmentSelect.appendChild(option);
+                });
+
+                btnTestIndividual.disabled = true;
+            }
+
+            async function testEquipment(jiga, equipment, logContainer = null) {
+                if (abortController && abortController.signal.aborted) {
+                    return { status: 'fail', message: 'Teste cancelado pelo usuário.' };
+                }
+
+                try {
+                    if (logContainer) {
+                        addLog(logContainer, `Iniciando teste de ${equipment.name}...`, 'info');
+                    }
+
+                    updateEquipmentCard(jiga, equipment.id, 'testing', 'Testando...');
+
+                    const response = await fetch(`/api/test/${jiga}/${equipment.id}`, { signal: abortController.signal });
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        if (logContainer) {
+                            addLog(logContainer, `Teste de ${equipment.name} concluído com sucesso.`, 'success');
+                        }
+                        updateEquipmentCard(jiga, equipment.id, 'ok', result.message || 'Teste concluído');
+                        return { status: 'ok', message: result.message };
+                    } else {
+                        throw new Error(result.message || 'Erro desconhecido');
+                    }
+
+                } catch (error) {
+                    if (logContainer) {
+                        addLog(logContainer, `Erro no teste de ${equipment.name}: ${error.message}`, 'error');
+                    }
+                    updateEquipmentCard(jiga, equipment.id, 'fail', error.message);
+                    return { status: 'fail', message: error.message };
+                }
+            }
+
+            async function testEquipment(jiga, equipment, logContainer = null) {
+                if (abortController && abortController.signal.aborted) {
+                    return { status: 'fail', message: 'Teste cancelado pelo usuário.' };
+                }
+
+                try {
+                    const endpoint = equipment.endpoint;
+
+                    // Atualizar status para "testando"
+                    if (logContainer) {
+                        addLog(logContainer, `Iniciando teste de ${equipment.name}...`, 'info');
+                    }
+
+                    updateEquipmentCard(jiga, equipment.id, 'testing', 'Testando...');
+
+                    // Simular teste
+                    const result = await simulateRequest(jiga, endpoint);
+
+                    if (logContainer) {
+                        addLog(logContainer, `Teste de ${equipment.name} concluído com sucesso.`, 'success');
+                    }
+
+                    updateEquipmentCard(jiga, equipment.id, 'ok', 'Teste concluído com sucesso');
+                    return { status: 'ok', message: 'Teste concluído com sucesso' };
+
+                } catch (error) {
+                    if (logContainer) {
+                        addLog(logContainer, `Erro no teste de ${equipment.name}: ${error.message}`, 'error');
+                    }
+
+                    updateEquipmentCard(jiga, equipment.id, 'fail', error.message);
+                    return { status: 'fail', message: error.message };
+                }
+            }
+
+            async function runAllTests(jiga) {
+                if (!jiga || !jigaEquipments[jiga]) {
+                    addLog(systemLog, 'Nenhuma JIGA selecionada para teste.', 'error');
+                    return;
+                }
+
+                btnTestAll.disabled = true;
+                btnStopAll.disabled = false;
+                testingInProgress = true;
+                abortController = new AbortController();
+
+                addLog(systemLog, `Iniciando testes em lote para JIGA ${jiga}...`, 'info');
+
+                const equipments = jigaEquipments[jiga];
+                totalTests = equipments.length;
+                currentTestIndex = 0;
+
+                // Reset do progresso
+                progressBar.style.width = '0%';
+
+                for (const equipment of equipments) {
+                    if (abortController.signal.aborted) {
+                        addLog(systemLog, 'Testes interrompidos pelo usuário.', 'info');
+                        break;
+                    }
+
+                    currentTestIndex++;
+                    const progressPercent = (currentTestIndex / totalTests) * 100;
+                    progressBar.style.width = `${progressPercent}%`;
+
+                    await testEquipment(jiga, equipment, systemLog);
+                }
+
+                testingInProgress = false;
+                btnTestAll.disabled = false;
+                btnStopAll.disabled = true;
+
+                // Finalizar a barra de progresso
+                progressBar.style.width = '100%';
+
+                addLog(systemLog, `Testes em lote para JIGA ${jiga} concluídos.`, 'info');
+            }
+
+            async function runIndividualTest() {
+                const jiga = jigaSelectIndividual.value;
+                const equipmentId = equipmentSelect.value;
+
+                if (!jiga || !equipmentId) {
+                    addLog(individualTestLog, 'Selecione uma JIGA e um equipamento para teste.', 'error');
+                    return;
+                }
+
+                const equipment = jigaEquipments[jiga].find(e => e.id === equipmentId);
+                if (!equipment) {
+                    addLog(individualTestLog, 'Equipamento não encontrado.', 'error');
+                    return;
+                }
+
+                btnTestIndividual.disabled = true;
+                btnStopIndividual.disabled = false;
+                testingInProgress = true;
+                abortController = new AbortController();
+
+                individualTestLog.innerHTML = ''; // Limpar log anterior
+                addLog(individualTestLog, `Iniciando teste de ${equipment.name} na JIGA ${jiga}...`, 'info');
+
+                await testEquipment(jiga, equipment, individualTestLog);
+
+                testingInProgress = false;
+                btnTestIndividual.disabled = false;
+                btnStopIndividual.disabled = true;
+
+                addLog(individualTestLog, `Teste individual para ${equipment.name} concluído.`, 'info');
+            }
+
+            // Event Listeners
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remover classe ativa de todas as abas
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+
+                    // Adicionar classe ativa à aba clicada
+                    tab.classList.add('active');
+
+                    // Mostrar conteúdo correspondente
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            jigaSelect.addEventListener('change', () => {
+                const jiga = jigaSelect.value;
+                populateEquipmentCards(jiga);
+            });
+
+
+
+            equipmentSelect.addEventListener('change', () => {
+                btnTestIndividual.disabled = !equipmentSelect.value;
+            });
+
+            btnTestAll.addEventListener('click', () => {
+                const jiga = jigaSelect.value;
+                runAllTests(jiga);
+            });
+
+            btnStopAll.addEventListener('click', () => {
+                if (abortController) {
+                    abortController.abort();
+                    addLog(systemLog, 'Solicitação de interrupção de testes enviada.', 'warning');
+                }
+            });
+
+            btnTestIndividual.addEventListener('click', runIndividualTest);
+
+            btnStopIndividual.addEventListener('click', () => {
+                if (abortController) {
+                    abortController.abort();
+                    addLog(individualTestLog, 'Teste individual interrompido.', 'warning');
+                }
+            });
+
+            btnSaveAdvanced.addEventListener('click', () => {
+                config.baseUrl = baseUrlInput.value;
+                config.timeout = parseInt(timeoutInput.value);
+                config.retryCount = parseInt(retryCountInput.value);
+
+                addLog(systemLog, 'Configurações atualizadas com sucesso.', 'success');
+            });
+
+            btnResetAdvanced.addEventListener('click', () => {
+                baseUrlInput.value = 'http://{jiga}.local/';
+                timeoutInput.value = '5000';
+                retryCountInput.value = '3';
+
+                config.baseUrl = 'http://{jiga}.local/';
+                config.timeout = 5000;
+                config.retryCount = 3;
+
+                addLog(systemLog, 'Configurações resetadas para os valores padrão.', 'info');
+            });
+
+            quickHelp.addEventListener('click', () => {
+                alert('Sistema de Teste de JIGAs\n\n' +
+                    'Este sistema permite realizar testes em equipamentos conectados às JIGAs.\n\n' +
+                    '1. Teste em Lote: Selecione uma JIGA para testar todos os equipamentos.\n' +
+                    '2. Teste Individual: Selecione uma JIGA e um equipamento específico para testar.\n' +
+                    '3. Configurações: Ajuste parâmetros de conexão e comportamento do sistema.\n\n' +
+                    'Para mais informações, consulte o manual do usuário.');
+            });
+
+            // Inicialização
+            btnStopAll.disabled = true;
+            btnStopIndividual.disabled = true;
+
+
+
+        });
+    </script>
+</body>
+
+</html>

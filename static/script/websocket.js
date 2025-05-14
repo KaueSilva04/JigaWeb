@@ -1,7 +1,8 @@
 
  async function buscarIPdaJiga(jiga) {
     try {
-        const response = await fetch('http://127.0.0.1:3000/api/jigaJson');
+        const apiHost = window.location.hostname;
+        const response = await fetch(`http://${apiHost}:3000/api/jigaJson`);
         const jigaInfoList = await response.json();
 
 

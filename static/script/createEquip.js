@@ -2,7 +2,8 @@
 async function buscarEstado(jigaId) {
     try {
         // Faz a requisição para buscar o JSON
-        const response = await fetch('http://127.0.0.1:3000/api/estadoJson');
+        const apiHost = window.location.hostname;
+        const response = await fetch(`http://${apiHost}:3000/api/estadoJson`);
         const jigaInfoList = await response.json();
 
 
@@ -191,7 +192,8 @@ function openModal(jiga, equipment) {
                     const ip = await buscarIPdaJiga(jiga);
 
                     try {
-                        const response = await fetch("http://127.0.0.1:3000/api/comutar", {
+                        const apiHost = window.location.hostname;
+                        const response = await fetch(`http://${apiHost}:3000/api/comutar`, {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
@@ -212,8 +214,8 @@ function openModal(jiga, equipment) {
                 const val = 2;
                 //console.log(tipo)
                 const ip = await buscarIPdaJiga(jiga); // ou dinamicamente, se necessário
-
-                await fetch("http://127.0.0.1:3000/api/comutar", {
+                const apiHost = window.location.hostname;
+                await fetch(`http://${apiHost}:3000/api/comutar`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -257,7 +259,8 @@ function openModal(jiga, equipment) {
                     const ip = await buscarIPdaJiga(jiga);
 
                     try {
-                        const response = await fetch("http://127.0.0.1:3000/api/comutar", {
+                        const apiHost = window.location.hostname;
+                        const response = await fetch(`http://${apiHost}:3000/api/comutar`, {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
@@ -278,8 +281,8 @@ function openModal(jiga, equipment) {
                 const val = 1;
                 //console.log(tipo)
                 const ip = await buscarIPdaJiga(jiga); // ou dinamicamente, se necessário
-
-                await fetch("http://127.0.0.1:3000/api/comutar", {
+                const apiHost = window.location.hostname;
+                await fetch(`http://${apiHost}:3000/api/comutar`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -372,8 +375,8 @@ function openModal(jiga, equipment) {
                     idsEquipamento.map(async (id, index) => {
                         const tipo = idsTipoEquipamento[index];
                         const val = 1;
-
-                        const response = await fetch("http://127.0.0.1:3000/api/comutar", {
+                        const apiHost = window.location.hostname;
+                        const response = await fetch(`http://${apiHost}:3000/api/comutar`, {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ ip, id, val, tipo })
@@ -408,8 +411,8 @@ function openModal(jiga, equipment) {
                     await Promise.all(
                         idsEquipamento.map(async (id, index) => {
                             const tipo = idsTipoEquipamento[index];
-
-                            const response = await fetch("http://127.0.0.1:3000/api/comutar", {
+                            const apiHost = window.location.hostname;
+                            const response = await fetch(`http://${apiHost}:3000/api/comutar`, {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({ ip, id, val, tipo })
@@ -436,8 +439,8 @@ function openModal(jiga, equipment) {
             const val = 2;
             //console.log(tipo)
             const ip = await buscarIPdaJiga(jiga); // ou dinamicamente, se necessário
-
-            await fetch("http://127.0.0.1:3000/api/comutar", {
+            const apiHost = window.location.hostname;
+            await fetch(`http://${apiHost}:3000/api/comutar`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

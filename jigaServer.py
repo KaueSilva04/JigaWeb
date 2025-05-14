@@ -26,6 +26,7 @@ def carregar_jigas_salvas():
 
 
 
+
 def salvar_jigas(jigas):
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(jigas, f, ensure_ascii=False, indent=2)

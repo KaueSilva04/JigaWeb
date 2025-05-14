@@ -48,7 +48,7 @@ app.get('/api/jigaJson', (req, res) => {
 
 
 app.post("/api/comutar", async (req, res) => {
-  let { ip, id, val ,tipo} = req.body;
+  let { ip, id, val, tipo } = req.body;
 
   if (!ip || typeof id !== "number" || typeof val !== "number") {
     return res.status(400).json({ success: false, error: "Dados inválidos." });
@@ -57,10 +57,10 @@ app.post("/api/comutar", async (req, res) => {
   //console.log(ip,id,val,tipo)
   try {
     // Realiza a comutação
-   
-    
-    const resultado = await enviarComutacao(ip, id, val,tipo);
-    
+
+
+    const resultado = await enviarComutacao(ip, id, val, tipo);
+
     // Se o resultado não for válido ou não contiver as informações esperadas
     if (!resultado) {
       return res.status(500).json({ success: false, error: "Erro interno no servidor." });
@@ -75,6 +75,66 @@ app.post("/api/comutar", async (req, res) => {
 
 
 
+});
+
+app.post("/api/comutarAll", async (req, res) => {
+
+  const { jiga , val} = req.body;
+
+  if (!jiga) {
+    return res.status(400).json({ success: false, error: "Nome da JIGA não fornecido." });
+  }
+
+  try {
+    const jigaInfoList = carregarListaJigas();
+    const jigaInfo = jigaInfoList.find(item => item.id === `${jiga}.local`);
+    if (!jigaInfo) {
+      return res.status(404).json({ success: false, error: `JIGA ${jiga} não encontrada.` });
+    }
+
+    const ip = jigaInfo.ip.replace(/:$/, '');
+    const url = `http://${ip}/getconfig`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      return res.status(500).json({ success: false, error: "Erro ao buscar configuração da JIGA." });
+    }
+
+    const data = await response.json();
+    const equipamentos = data?.cfg?.eqp;
+    console.log(equipamentos)
+    if (!equipamentos || !Array.isArray(equipamentos)) {
+      return res.status(500).json({ success: false, error: "Lista de equipamentos inválida ou ausente." });
+    }
+    // ou qualquer outra lógica de comutação
+    // Executa comutação para cada equipamento
+    const resultados = [];
+
+    for (let equipamento of equipamentos) {
+      const { id, idTipo } = equipamento;
+
+      if (!id || !idTipo) continue;
+
+
+      const resultado = await enviarComutacao(ip, id, val, idTipo);
+      // Alterna valor entre 1 e 2, se desejar
+     
+      resultados.push({
+        id,
+        idTipo,
+        sucesso: resultado?.success !== false,
+        resposta: resultado,
+      });
+
+
+    }
+
+    res.json({ success: true, jiga, total: resultados.length, resultados });
+
+  } catch (error) {
+    console.error("❌ Erro no comutarAll:", error);
+    res.status(500).json({ success: false, error: "Erro interno ao executar comutarAll." });
+  }
 });
 
 
@@ -113,69 +173,35 @@ function carregarListaJigas() {
   return JSON.parse(rawData);
 }
 
-function carregarListasEstados() {
-  const filePath = path.join(__dirname, 'jiga_estado.json'); // nome do arquivo
 
-  // Verifique se o arquivo existe
-  if (!fs.existsSync(filePath)) {
-    console.error(`Arquivo não encontrado: ${filePath}`);
-    return [];
+async function comitarAll(jiga) {
+  const jigaInfoList = carregarListaJigas();
+  const jigaInfo = jigaInfoList.find(item => item.id === `${jiga}.local`);
+  if (!jigaInfo) {
+    console.error(`❌ JIGA ${jiga} não encontrada no JSON.`);
+    return null;
   }
 
-  const rawData = fs.readFileSync(filePath);
-  return JSON.parse(rawData);
-}
+  const ip = jigaInfo.ip.replace(/:$/, '');
+  const url = `http://${ip}/getconfig`;
+  const response = await fetch(url);
+  await conectarWebSocket(jiga);
+  if (!response.ok) {
+    throw new Error(`Falha ao obter dados para a JIGA: ${jiga}`);
+  }
 
-function clearJsonFile() {
-  const filePath = path.join(__dirname, "jiga_estado.json");
+  let val;
+  eqps.forEach(e => {
 
-  // Escreve um array vazio no arquivo, apagando seu conteúdo
-  fs.writeFile(filePath, JSON.stringify([], null, 2), (err) => {
-    if (err) {
-      console.error('Erro ao limpar os dados:', err);
-    }
+    val = 1;
+
+    enviarComutacao(ip, e.id, val, e.idTipo)
+
+    val = val === 1 ? 2 : 1;
+
+
   });
 }
-
-
-// Função para salvar 'id' e 'val' no arquivo JSON
-function saveToJson(id, val) {
-  const filePath = path.join(__dirname, "jiga_estado.json");
-  const newData = { id, val };
-
-  // Tenta ler o arquivo existente
-  let currentData = [];
-  try {
-    const rawData = fs.readFileSync(filePath, 'utf-8');
-
-    // Verifica se o arquivo está vazio e evita erro de parse
-    if (rawData.trim()) {
-      currentData = JSON.parse(rawData); // Converte o conteúdo para um array
-    }
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      // Se o arquivo não existir, inicializa com um array vazio
-      
-    } else {
-      console.error('Erro ao carregar ou parsear o arquivo JSON:', err);
-      return;
-    }
-  }
-
-  // Adiciona a nova entrada ao array
-  currentData.push(newData);
-
-  // Salva os dados atualizados no arquivo
-  try {
-    fs.writeFileSync(filePath, JSON.stringify(currentData, null, 2), 'utf-8');
-
-  } catch (err) {
-    console.error('Erro ao salvar os dados no arquivo:', err);
-  }
-}
-
-
-
 
 
 async function getDadosReaisDaJiga(jiga) {
@@ -297,7 +323,7 @@ async function conectarWebSocket(jiga) {
     const socket = new WebSocket(`ws://${ip}/ws`);
 
     socket.onopen = function () {
-     // console.log("🔌 Conectado ao WebSocket.");
+      // console.log("🔌 Conectado ao WebSocket.");
     };
 
     socket.onmessage = function (event) {
@@ -364,7 +390,7 @@ async function enviarComutacao(ip, id, val, idTipo) {
 
     // Configurando o corpo da requisição
     const body = JSON.stringify({ id, val });
-   // console.log(body)
+    // console.log(body)
     // Fazendo a requisição com os dados configurados
     const response = await fetch(url, {
       method: 'POST',
@@ -401,8 +427,9 @@ async function enviarComutacao(ip, id, val, idTipo) {
 
 
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Servidor Node.js rodando na porta ${port}`);
 });
+
 
 

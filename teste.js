@@ -280,9 +280,6 @@ async function getDadosReaisDaJiga(jiga) {
 }
 
 
-
-
-
 function agruparEquipamentosPorGrupo(data) {
   const equipamentosPorGrupo = {};
 
@@ -306,9 +303,6 @@ function agruparEquipamentosPorGrupo(data) {
 
 
 const novosDados = [];
-
-
-
 
 
 async function conectarWebSocket(jiga) {
@@ -372,8 +366,6 @@ async function conectarWebSocket(jiga) {
   });
 }
 
-
-
 // Para Node 18+ já tem fetch embutido
 // Se estiver usando versão mais antiga, use: const fetch = require('node-fetch');
 
@@ -418,13 +410,6 @@ async function enviarComutacao(ip, id, val, idTipo) {
     return { success: false, error: error.message };
   }
 }
-
-
-
-
-
-
-
 
 
 app.listen(port, '0.0.0.0', () => {

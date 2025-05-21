@@ -1,5 +1,5 @@
 
- async function buscarIPdaJiga(jiga) {
+async function buscarIPdaJiga(jiga) {
     try {
         const apiHost = window.location.hostname;
         const response = await fetch(`http://${apiHost}:3000/api/jigaJson`);
@@ -21,10 +21,6 @@
         return null;
     }
 }
-
-
-
-
 
 async function conectarWebSocket(jiga) {
     const ipJiga = await buscarIPdaJiga(jiga);

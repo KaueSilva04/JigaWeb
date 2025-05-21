@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import json
 import subprocess
 import threading
@@ -24,13 +24,9 @@ def carregar_jigas_salvas():
                 return []
     return []
 
-
-
-
 def salvar_jigas(jigas):
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(jigas, f, ensure_ascii=False, indent=2)
-
 
 # Executa o ping em uma thread separada
 def executar_ping():
@@ -44,7 +40,6 @@ def index():
 @app.route('/teste')
 def testeJiga():
     return render_template('testJiga.html')
-
 
 # Rota para iniciar o ping
 @app.route('/api/ping', methods=['POST'])
@@ -94,8 +89,58 @@ def api_jigas():
             jigas_salvas.append(jiga_atual)
 
     salvar_jigas(jigas_salvas)
-
     return jsonify(jigas_salvas)
+
+
+@app.route('/api/jigas/modificar', methods=['PUT'])
+def update_jiga():
+    data = request.get_json()
+    jigas_salvas = carregar_jigas_salvas()  # Função que lê o JSON salvo
+    
+    updated = False
+    for jiga in jigas_salvas:
+        if jiga['id'] == data.get('id', jiga.get('id')):
+            jiga['ip'] = data.get('ip', jiga.get('ip'))
+            jiga['status'] = data.get('status', jiga.get('status'))
+            jiga['lastCheck'] = data.get('lastCheck', jiga.get('lastCheck'))
+            updated = True
+            break
+    
+    if not updated:
+        return jsonify({'error': 'JIGA não encontrada'}), 404
+
+    salvar_jigas(jigas_salvas)  # Função que grava o JSON atualizado
+
+    return jsonify({'success': True})
+
+@app.route('/api/jigas/adicionar', methods=['POST'])
+def adicionar_jiga():
+    data = request.get_json()
+
+    if not data.get('id') or not data.get('ip') or not data.get('status'):
+        return jsonify({'error': 'Campos obrigatórios faltando'}), 400
+
+    jigas = carregar_jigas_salvas()
+
+    # Verificar se já existe uma JIGA com esse ID
+    if any(j['id'] == data['id'] for j in jigas):
+        return jsonify({'error': 'JIGA já existe'}), 409
+
+    nova_jiga = {
+        'id': data['id'],
+        'ip': data['ip'],
+        'status': data['status'],
+        'lastCheck': data.get('lastCheck') or datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
+
+    jigas.append(nova_jiga)
+    salvar_jigas(jigas)
+
+    return jsonify({'success': True, 'jiga': nova_jiga})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+
+
+
+

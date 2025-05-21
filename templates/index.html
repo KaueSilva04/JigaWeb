@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestão de Jigas</title>
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style/index.css') }}">
     <script src="{{ url_for('static', filename='script/index.js') }}"></script>
 
@@ -18,7 +18,10 @@
                 <span class="logo-icon">⚙️</span>
                 <h1>Sistema de Gestão de Jigas</h1>
             </div>
-            <button id="refreshButton" class="btn refresh-btn">🔄 Atualizar Dados</button>
+            <div>
+                <button id="refreshButton" class="btn refresh-btn">🔄 Atualizar Jiga</button>
+                <button id="addJigaButton" class="btn refresh-btn">🞧 Adicionar Jiga</button>
+            </div>
         </div>
     </header>
 
@@ -59,9 +62,10 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>ip</th>
+                            <th>IP</th>
                             <th>Status</th>
                             <th>Última Verificação</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody id="jigasTableBody">
@@ -72,13 +76,78 @@
         </div>
     </div>
 
+    <!-- Modal para edição -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Configurações da Jiga</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <form id="editForm">
+                <input type="hidden" id="jigaId">
+                <div class="form-group">
+                    <label for="jigaName">ID da Jiga:</label>
+                    <input type="text" id="jigaName" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="jigaIp">Endereço IP:</label>
+                    <input type="text" id="jigaIp" required>
+                </div>
+                <div class="form-group">
+                    <label for="jigaStatus">Status:</label>
+                    <select id="jigaStatus" required>
+                        <option value="active">Ativo</option>
+                        <option value="maintenance">Em Manutenção</option>
+                        <option value="offline">Offline</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn cancel-btn" id="cancelEdit">Cancelar</button>
+                    <button type="submit" class="btn save-btn">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar jiga -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Adicionar Nova Jiga</h2>
+                <button class="close-btn" id="closeAddModal">&times;</button>
+            </div>
+            <form id="addForm">
+                <div class="form-group">
+                    <label for="newJigaId">ID da Jiga:</label>
+                    <input type="text" id="newJigaId" required>
+                </div>
+                <div class="form-group">
+                    <label for="newJigaIp">Endereço IP:</label>
+                    <input type="text" id="newJigaIp" required>
+                </div>
+                <div class="form-group">
+                    <label for="newJigaStatus">Status:</label>
+                    <select id="newJigaStatus" required>
+                        <option value="active">Ativo</option>
+                        <option value="maintenance">Em Manutenção</option>
+                        <option value="offline">Offline</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn cancel-btn" id="cancelAdd">Cancelar</button>
+                    <button type="submit" class="btn save-btn">Adicionar Jiga</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
             <p>Sistema de Gestão de Jigas © 2025</p>
         </div>
     </footer>
 
-   
+
 
 </body>
 

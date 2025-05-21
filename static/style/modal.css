@@ -69,7 +69,7 @@
       align-items: center;
       flex-wrap: wrap;
       padding: 1rem;
-     
+
   }
 
   .checkbox-group {
@@ -79,9 +79,9 @@
       flex: 1;
 
   }
-  
-   .checkbox-group label {
-    margin-bottom: 0%;
+
+  .checkbox-group label {
+      margin-bottom: 0%;
   }
 
 
@@ -136,8 +136,8 @@
       transition: background-color 0.2s;
   }
 
-  .checkbox-modal{
-    width: 30px;
+  .checkbox-modal {
+      width: 30px;
   }
 
 

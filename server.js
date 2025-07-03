@@ -224,7 +224,7 @@ async function getDadosReaisDaJiga(jiga) {
   const data = await response.json();
   const eqps = data.cfg.eqp;
   const boList = eqps.map(item => item.bo).filter(Boolean).flat();
-
+//console.log(JSON.stringify(data, null, 2));
 
   const equipamentosPorGrupo = {};
 
@@ -243,8 +243,10 @@ async function getDadosReaisDaJiga(jiga) {
       case "alm":
         entradaId = e.bo?.[0];
         break;
+      case "djtri":
+        entradaId = e.boFch?.[0];
+        break;
       case "djmono":
-      case "djtrip":
         entradaId = e.boAbt?.[0];
         break;
       case "secc":
@@ -325,6 +327,7 @@ async function conectarWebSocket(jiga) {
 
       try {
         const data = JSON.parse(event.data);
+      // console.log(JSON.stringify(data, null, 2));
 
         if (data.ind && Array.isArray(data.ind.bo)) {
           //console.log("✅ Dados com 'bo' encontrados, processando...");
@@ -334,12 +337,14 @@ async function conectarWebSocket(jiga) {
           if (Array.isArray(boDados)) {
             boDados.forEach(equip => {
               if (equip?.id !== undefined && equip?.val !== undefined) {
+              
                 //console.log(`🛠 Atualizando estadoAtual -> ID: ${equip.id}, VAL: ${equip.val}`);
                 estadoAtual.set(Number(equip.id), Number(equip.val)); // Atualiza o estadoAtual
 
               } else {
                 console.warn("⚠️ Dados incompletos recebidos:", equip);
               }
+                 //console.log(equip?.id);
             });
 
             // Após a atualização do estado, resolvemos a promise
@@ -382,6 +387,7 @@ async function enviarComutacao(ip, id, val, idTipo) {
 
     // Configurando o corpo da requisição
     const body = JSON.stringify({ id, val });
+   
     // console.log(body)
     // Fazendo a requisição com os dados configurados
     const response = await fetch(url, {
@@ -389,7 +395,7 @@ async function enviarComutacao(ip, id, val, idTipo) {
       headers: headers,
       body: body,
     });
-
+ 
     // Verificando o status da resposta e logando o corpo
     //console.log(`Status da resposta: ${response.status}`);
     const bodyText = await response.text();  // Lê o corpo como texto
